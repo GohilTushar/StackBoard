@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="244" height="64" viewBox="0 0 244 64" fill="none">
+  <title>Stackboard</title>
+  <!-- Wordmark for light backgrounds -->
+  <defs>
+    <linearGradient id="sb-bg" x1="4" y1="4" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00C8D4"/>
+      <stop offset="1" stop-color="#6457F9"/>
+    </linearGradient>
+    <linearGradient id="sb-text" x1="146" y1="0" x2="236" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0094A0"/>
+      <stop offset="1" stop-color="#5A4BEA"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#sb-bg)"/>
+  <path d="M14 40.5 32 49.5l18-9" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14 32.5 32 41.5l18-9" stroke="#FFFFFF" stroke-opacity="0.8" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 14.5 50 23.5 32 32.5 14 23.5Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="25" cy="23.5" r="2.4" fill="#6457F9"/>
+  <circle cx="39" cy="23.5" r="2.4" fill="#00C8D4"/>
+  <path d="M27.4 23.5h9.2" stroke="#3A3A9E" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="74" y="43" font-family="Geist, Inter, 'Segoe UI', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif" font-size="31" font-weight="700" letter-spacing="-0.6"><tspan fill="#111114">Stack</tspan><tspan fill="url(#sb-text)">board</tspan></text>
+</svg>
