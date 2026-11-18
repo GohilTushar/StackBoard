@@ -84,7 +84,12 @@ interface DragState {
   y: number
 }
 
-export function ShapePanel() {
+interface ShapePanelProps {
+  /** Adds a shape at the centre of the viewport. Used for taps, since HTML5 drag-and-drop does not fire on touch screens. */
+  onAddShape: (shape: NodeShape) => void
+}
+
+export function ShapePanel({ onAddShape }: ShapePanelProps) {
   const [drag, setDrag] = useState<DragState | null>(null)
 
   function handleDragStart(event: React.DragEvent, shape: NodeShape) {
@@ -131,19 +136,22 @@ export function ShapePanel() {
         </div>
       )}
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center">
-        <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-border-default bg-bg-surface/95 px-3 py-2 shadow-xl backdrop-blur-xl">
+      <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 flex justify-center px-3 sm:bottom-4">
+        <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-border-default bg-bg-surface/95 px-2.5 py-1.5 shadow-xl backdrop-blur-xl sm:px-3 sm:py-2">
           {NODE_SHAPES.map((shape) => {
             const Icon = SHAPE_ICONS[shape]
             return (
               <button
                 key={shape}
+                type="button"
                 draggable
                 onDragStart={(e) => handleDragStart(e, shape)}
                 onDrag={(e) => handleDrag(e, shape)}
                 onDragEnd={handleDragEnd}
-                title={shape}
-                className="flex h-8 w-8 cursor-grab items-center justify-center rounded-xl text-text-muted transition-colors hover:bg-bg-elevated hover:text-text-primary active:cursor-grabbing"
+                onClick={() => onAddShape(shape)}
+                title={`Add ${shape} (click or drag)`}
+                aria-label={`Add ${shape}`}
+                className="flex h-9 w-9 cursor-grab items-center justify-center rounded-xl text-text-muted transition-colors hover:bg-bg-elevated hover:text-text-primary active:cursor-grabbing sm:h-8 sm:w-8"
               >
                 <Icon className="h-4 w-4" />
               </button>

@@ -617,12 +617,15 @@ export function AiSidebar({ isOpen, onClose, roomId, projectId }: AiSidebarProps
 
     <aside
       className={cn(
-        "fixed inset-y-3 right-3 top-15 z-40 hidden w-84 flex-col rounded-3xl border border-border-subtle bg-bg-surface/95 backdrop-blur-xl transition-transform duration-200 md:flex",
-        isOpen ? "translate-x-0" : "translate-x-[calc(100%+1rem)]"
+        // Mobile: full-width panel below the navbar. md+: floating column on the right.
+        "fixed inset-x-2 bottom-2 top-14 z-40 flex flex-col rounded-3xl border border-border-subtle bg-bg-surface/95 backdrop-blur-xl transition-transform duration-200 md:inset-x-auto md:bottom-3 md:right-3 md:top-15 md:w-84",
+        isOpen ? "translate-x-0" : "pointer-events-none translate-x-[calc(100%+1rem)]"
       )}
+      aria-hidden={!isOpen}
+      inert={!isOpen}
     >
       {/* Header */}
-      <div className="flex shrink-0 items-center gap-3 border-b border-border-default px-5 py-4">
+      <div className="flex shrink-0 items-center gap-3 border-b border-border-default px-4 py-3 md:px-5 md:py-4">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-accent-ai/15">
           <Bot className="h-4 w-4 text-accent-ai-text" />
         </div>
@@ -744,10 +747,10 @@ export function AiSidebar({ isOpen, onClose, roomId, projectId }: AiSidebarProps
                   placeholder="Describe your system…"
                   disabled={isLoading}
                   style={{ height: "72px", maxHeight: "160px" }}
-                  className="resize-none overflow-y-auto border-0 bg-transparent p-0 text-sm text-text-primary shadow-none placeholder:text-text-faint focus-visible:ring-0 focus-visible:ring-offset-0 disabled:opacity-50"
+                  className="resize-none overflow-y-auto border-0 bg-transparent p-0 text-base text-text-primary md:text-sm shadow-none placeholder:text-text-faint focus-visible:ring-0 focus-visible:ring-offset-0 disabled:opacity-50"
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-text-faint">Shift+Enter for newline</span>
+                  <span className="text-[10px] text-text-faint"><span className="hidden md:inline">Shift+Enter for newline</span></span>
                   <Button
                     size="sm"
                     onClick={handleSend}
@@ -852,10 +855,10 @@ export function AiSidebar({ isOpen, onClose, roomId, projectId }: AiSidebarProps
                   onKeyDown={handleChatKeyDown}
                   placeholder="Send a message…"
                   style={{ height: "72px", maxHeight: "160px" }}
-                  className="resize-none overflow-y-auto border-0 bg-transparent p-0 text-sm text-text-primary shadow-none placeholder:text-text-faint focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="resize-none overflow-y-auto border-0 bg-transparent p-0 text-base text-text-primary md:text-sm shadow-none placeholder:text-text-faint focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-text-faint">Shift+Enter for newline</span>
+                  <span className="text-[10px] text-text-faint"><span className="hidden md:inline">Shift+Enter for newline</span></span>
                   <Button
                     size="sm"
                     onClick={handleChatSend}
@@ -923,7 +926,7 @@ export function AiSidebar({ isOpen, onClose, roomId, projectId }: AiSidebarProps
                           e.stopPropagation()
                           handleSpecDownload(spec.id)
                         }}
-                        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-text-faint opacity-0 transition-opacity hover:bg-bg-subtle hover:text-text-primary group-hover:opacity-100"
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-faint transition-opacity md:h-6 md:w-6 hover:bg-bg-subtle hover:text-text-primary md:opacity-0 md:group-hover:opacity-100"
                       >
                         <Download className="h-3 w-3" />
                       </button>

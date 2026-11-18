@@ -18,7 +18,7 @@ import type { Connection } from "@xyflow/react"
 import { useLiveblocksFlow } from "@liveblocks/react-flow"
 import { useUndo, useRedo, useCanUndo, useCanRedo } from "@liveblocks/react"
 import type { CanvasNode, CanvasEdge, NodeShape } from "@/types/canvas"
-import { NODE_COLORS } from "@/types/canvas"
+import { NODE_COLORS, SHAPE_DEFAULTS } from "@/types/canvas"
 import { CanvasNodeComponent } from "@/components/editor/canvas/canvas-node"
 import { CanvasEdgeComponent } from "@/components/editor/canvas/canvas-edge"
 import { ShapePanel } from "@/components/editor/canvas/shape-panel"
@@ -192,6 +192,24 @@ export function CanvasEditor({ projectId, pendingTemplate, onTemplateImported, o
     [onEdgesChange]
   )
 
+  // Adds a node of the given shape centred on a screen-space point.
+  const addShapeAt = useCallback(
+    (shape: NodeShape, screenPoint: { x: number; y: number }) => {
+      const size = SHAPE_DEFAULTS[shape]
+      const center = screenToFlowPosition(screenPoint)
+      const newNode: CanvasNode = {
+        id: generateNodeId(shape),
+        type: "canvasNode",
+        position: { x: center.x - size.width / 2, y: center.y - size.height / 2 },
+        data: { label: "", color: NODE_COLORS[0].fill, textColor: NODE_COLORS[0].text, shape },
+        width: size.width,
+        height: size.height,
+      }
+      onNodesChange([{ type: "add", item: newNode }])
+    },
+    [screenToFlowPosition, onNodesChange]
+  )
+
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
@@ -211,25 +229,26 @@ export function CanvasEditor({ projectId, pendingTemplate, onTemplateImported, o
         return
       }
 
-      const center = screenToFlowPosition({ x: event.clientX, y: event.clientY })
-      const position = {
-        x: center.x - payload.size.width / 2,
-        y: center.y - payload.size.height / 2,
-      }
-
-      const id = generateNodeId(payload.shape)
-      const newNode: CanvasNode = {
-        id,
-        type: "canvasNode",
-        position,
-        data: { label: "", color: NODE_COLORS[0].fill, textColor: NODE_COLORS[0].text, shape: payload.shape },
-        width: payload.size.width,
-        height: payload.size.height,
-      }
-
-      onNodesChange([{ type: "add", item: newNode }])
+      addShapeAt(payload.shape, { x: event.clientX, y: event.clientY })
     },
-    [screenToFlowPosition, onNodesChange]
+    [addShapeAt]
+  )
+
+  // Tap/click on a shape button: drop it in the middle of the visible canvas.
+  // This is the only way to add shapes on touch screens, where HTML5 drag-and-drop does not fire.
+  const tapCountRef = useRef(0)
+  const onAddShape = useCallback(
+    (shape: NodeShape) => {
+      const rect = wrapperRef.current?.getBoundingClientRect()
+      if (!rect) return
+      // Stagger repeated taps so new nodes don't stack exactly on top of each other.
+      const offset = (tapCountRef.current++ % 5) * 24
+      addShapeAt(shape, {
+        x: rect.left + rect.width / 2 + offset,
+        y: rect.top + rect.height / 2 + offset,
+      })
+    },
+    [addShapeAt]
   )
 
   return (
@@ -270,7 +289,7 @@ export function CanvasEditor({ projectId, pendingTemplate, onTemplateImported, o
         canUndo={canUndo}
         canRedo={canRedo}
       />
-      <ShapePanel />
+      <ShapePanel onAddShape={onAddShape} />
       <PresenceCursors />
       <CollaboratorAvatars />
       <SaveStatusIndicator status={saveStatus} />
@@ -281,7 +300,8 @@ export function CanvasEditor({ projectId, pendingTemplate, onTemplateImported, o
 function SaveStatusIndicator({ status }: { status: SaveStatus }) {
   if (status === "idle") return null
   return (
-    <div className="pointer-events-none absolute bottom-16 left-1/2 -translate-x-1/2">
+    // On mobile the bottom of the canvas is taken by two toolbar rows, so show the status at the top.
+    <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 sm:bottom-16 sm:top-auto">
       <span
         className={
           "rounded-full px-3 py-1 text-xs font-medium " +

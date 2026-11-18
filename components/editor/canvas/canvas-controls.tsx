@@ -22,7 +22,8 @@ export function CanvasControls({
   canRedo,
 }: CanvasControlsProps) {
   return (
-    <div className="absolute bottom-4 left-4 z-10 flex items-center gap-0.5 rounded-full border border-border-default bg-bg-surface/95 px-2 py-1.5 shadow-xl backdrop-blur-xl">
+    // Below `sm` the shape panel takes the bottom row, so the controls sit above it.
+    <div className="absolute bottom-[4.25rem] left-3 z-10 flex items-center gap-0.5 rounded-full border border-border-default bg-bg-surface/95 px-2 py-1.5 shadow-xl backdrop-blur-xl sm:bottom-4 sm:left-4">
       <ControlButton onClick={onZoomOut} title="Zoom out">
         <Minus className="h-3.5 w-3.5" />
       </ControlButton>
@@ -58,7 +59,7 @@ function ControlButton({ onClick, title, disabled, children }: ControlButtonProp
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className="flex h-7 w-7 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-bg-elevated hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-30"
+      className="flex h-8 w-8 items-center justify-center rounded-full sm:h-7 sm:w-7 text-text-muted transition-colors hover:bg-bg-elevated hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-30"
     >
       {children}
     </button>

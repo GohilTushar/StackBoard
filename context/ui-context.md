@@ -100,6 +100,20 @@ shadcn/ui on top of Tailwind. No custom design system. Components live in `compo
 - Modals and dialogs: centered overlay, `rounded-3xl`, dark background with backdrop blur.
 - Navbar: top bar with dark background and bottom border.
 
+## Responsive Behavior
+
+Mobile = below the Tailwind `md` breakpoint (768px). `hooks/use-media-query.ts` exposes `useIsMobile()` (reactive) and `isMobileViewport()` (one-off check in event handlers) using the same query.
+
+- Full-height screens use `h-dvh` / `min-h-dvh` (not `h-screen`) so mobile browser chrome doesn't cut off the bottom.
+- Workspace: both sidebars default open on desktop and closed on mobile. On mobile only one sidebar can be open at a time; picking a project closes the project sidebar.
+- AI sidebar: full-width panel below the navbar on mobile (`inset-x-2`), floating 21rem column on the right from `md`.
+- Navbar actions (Save, Templates, Share) are icon-only below `sm`; labels show from `sm` up.
+- Canvas: below `sm` the shape panel sits on the bottom row and the zoom/undo controls stack above it on the left; the save status pill moves to the top-centre.
+- Shapes can be added by tapping/clicking a shape button (placed at the viewport centre) as well as by drag-and-drop — HTML5 drag-and-drop does not fire on touch screens.
+- Anything revealed on hover must also be reachable without hover: hover-only actions are `md:opacity-0 md:group-hover:opacity-100` (always visible on mobile), and node connection handles also show when the node is selected.
+- Text inputs use `text-base md:text-sm` so iOS Safari doesn't zoom in on focus.
+- Dialogs use `max-w-[calc(100%-2rem)]`, scroll within `dvh`-based max heights, and reduce padding below `sm`. The templates grid is 1 / 2 / 3 columns at base / `sm` / `lg`.
+
 ## Icons
 
 Lucide React. Stroke-based icons only — no filled variants. Icon sizes: `h-4 w-4` for inline, `h-5 w-5` for buttons, `h-8 w-8` for feature icons in empty states.

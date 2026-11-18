@@ -188,29 +188,29 @@ export function StarterTemplatesModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[min(1520px,95vw)]! gap-0 p-0">
-        <DialogHeader className="border-b border-border-default px-10 py-7">
-          <DialogTitle className="text-xl">Import Template</DialogTitle>
+      <DialogContent className="flex max-h-[calc(100dvh-2rem)] max-w-[min(1520px,calc(100%-2rem))]! flex-col gap-0 overflow-hidden p-0">
+        <DialogHeader className="shrink-0 border-b border-border-default px-5 py-5 pr-12 sm:px-10 sm:py-7">
+          <DialogTitle className="text-lg sm:text-xl">Import Template</DialogTitle>
           <DialogDescription>
             Choose a starter template to pre-populate your canvas. Any existing nodes will be
             replaced — use <kbd className="rounded border border-border-default bg-bg-elevated px-1 py-0.5 font-mono text-[11px] text-text-muted">⌘Z</kbd> to undo.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-y-auto px-10 py-8">
-          <div className="grid grid-cols-3 gap-8">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-10 sm:py-8">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8">
             {CANVAS_TEMPLATES.map((template) => (
               <div
                 key={template.id}
                 className="flex flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-elevated transition-colors hover:border-border-subtle"
               >
                 {/* Preview */}
-                <div className="bg-bg-base px-5 pt-5 pb-4">
+                <div className="bg-bg-base px-4 pt-4 pb-3 sm:px-5 sm:pt-5 sm:pb-4">
                   <TemplatePreview template={template} />
                 </div>
 
                 {/* Card body */}
-                <div className="flex flex-1 flex-col gap-4 border-t border-border-default p-5">
+                <div className="flex flex-1 flex-col gap-4 border-t border-border-default p-4 sm:p-5">
                   <div>
                     <p className="text-base font-semibold text-text-primary">{template.name}</p>
                     <p className="mt-1.5 text-sm leading-relaxed text-text-muted">

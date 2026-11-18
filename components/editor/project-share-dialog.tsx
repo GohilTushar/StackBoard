@@ -129,7 +129,7 @@ export function ProjectShareDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[calc(100%-2rem)] gap-0 rounded-3xl border border-border-subtle bg-bg-surface p-0 text-text-primary sm:max-w-xl">
-        <DialogHeader className="border-b border-border-default px-6 py-5">
+        <DialogHeader className="border-b border-border-default px-4 py-4 pr-12 sm:px-6 sm:py-5">
           <DialogTitle>Share project</DialogTitle>
           <DialogDescription className="text-text-muted">
             {canManage
@@ -138,10 +138,10 @@ export function ProjectShareDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex max-h-[70vh] flex-col gap-5 overflow-y-auto px-6 py-5">
+        <div className="flex max-h-[70dvh] flex-col gap-5 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
           {canManage ? (
             <div className="rounded-2xl border border-border-subtle bg-bg-elevated/60 p-4">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <div>
                   <p className="text-sm font-medium text-text-primary">Workspace link</p>
                   <p className="mt-1 text-xs leading-5 text-text-muted">

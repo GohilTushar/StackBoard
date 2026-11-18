@@ -12,6 +12,7 @@ import { ProjectSidebar } from "@/components/editor/project-sidebar"
 import { AiSidebar } from "@/components/editor/ai-sidebar"
 import { CanvasRoom } from "@/components/editor/canvas/canvas-room"
 import { useProjectActions, type ProjectRow } from "@/hooks/use-project-actions"
+import { useIsMobile } from "@/hooks/use-media-query"
 import type { CanvasTemplate } from "@/components/editor/starter-templates"
 
 interface EditorWorkspaceClientProps {
@@ -27,8 +28,25 @@ export function EditorWorkspaceClient({
   sharedProjects,
   roomId,
 }: EditorWorkspaceClientProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [aiSidebarOpen, setAiSidebarOpen] = useState(true)
+  const isMobile = useIsMobile()
+  // null = "use the default for this screen size": both panels open on desktop,
+  // both closed on mobile so the canvas is visible on first load.
+  const [sidebarPref, setSidebarPref] = useState<boolean | null>(null)
+  const [aiSidebarPref, setAiSidebarPref] = useState<boolean | null>(null)
+  const sidebarOpen = sidebarPref ?? !isMobile
+  const aiSidebarOpen = aiSidebarPref ?? !isMobile
+
+  // On mobile the panels cover the canvas, so only one may be open at a time.
+  const toggleSidebar = () => {
+    const next = !sidebarOpen
+    setSidebarPref(next)
+    if (next && isMobile) setAiSidebarPref(false)
+  }
+  const toggleAiSidebar = () => {
+    const next = !aiSidebarOpen
+    setAiSidebarPref(next)
+    if (next && isMobile) setSidebarPref(false)
+  }
   const [shareDialogOpen, setShareDialogOpen] = useState(false)
   const [templatesOpen, setTemplatesOpen] = useState(false)
   const [pendingTemplate, setPendingTemplate] = useState<CanvasTemplate | null>(null)
@@ -48,13 +66,13 @@ export function EditorWorkspaceClient({
           flow: new LiveObject({ nodes: new LiveMap(), edges: new LiveMap() }),
         })}
       >
-        <div className="flex h-screen flex-col bg-bg-base">
+        <div className="flex h-dvh flex-col overflow-hidden bg-bg-base">
           <EditorNavbar
             isOpen={sidebarOpen}
-            onToggle={() => setSidebarOpen((prev) => !prev)}
+            onToggle={toggleSidebar}
             projectName={currentProject.name}
             isAiSidebarOpen={aiSidebarOpen}
-            onToggleAiSidebar={() => setAiSidebarOpen((prev) => !prev)}
+            onToggleAiSidebar={toggleAiSidebar}
             onOpenShareDialog={() => setShareDialogOpen(true)}
             onOpenTemplates={() => setTemplatesOpen(true)}
             saveStatus={saveStatus}
@@ -73,7 +91,7 @@ export function EditorWorkspaceClient({
 
           <ProjectSidebar
             isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
+            onClose={() => setSidebarPref(false)}
             ownedProjects={ownedProjects}
             sharedProjects={sharedProjects}
             onNewProject={actions.openCreate}
@@ -84,7 +102,7 @@ export function EditorWorkspaceClient({
 
           <AiSidebar
             isOpen={aiSidebarOpen}
-            onClose={() => setAiSidebarOpen(false)}
+            onClose={() => setAiSidebarPref(false)}
             roomId={roomId}
             projectId={currentProject.id}
           />

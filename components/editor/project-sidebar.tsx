@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 import type { ProjectRow } from "@/hooks/use-project-actions"
+import { isMobileViewport } from "@/hooks/use-media-query"
 
 interface ProjectSidebarProps {
   isOpen: boolean
@@ -32,6 +33,12 @@ export function ProjectSidebar({
     ? "shared"
     : "my-projects"
 
+  // The sidebar overlays the whole screen on mobile, so dismiss it once a
+  // project is picked. On desktop it stays open alongside the canvas.
+  const closeOnMobile = () => {
+    if (isMobileViewport()) onClose()
+  }
+
   return (
     <>
       {isOpen && (
@@ -44,7 +51,7 @@ export function ProjectSidebar({
 
       <aside
         className={cn(
-          "fixed inset-y-3 left-3 top-[3.75rem] z-50 flex w-72 flex-col rounded-2xl border border-border-subtle bg-bg-surface/95 backdrop-blur-xl transition-transform duration-200",
+          "fixed bottom-3 left-3 top-[3.75rem] z-50 flex w-[min(18rem,calc(100vw-1.5rem))] flex-col rounded-2xl border border-border-subtle bg-bg-surface/95 backdrop-blur-xl transition-transform duration-200",
           isOpen ? "translate-x-0" : "-translate-x-[calc(100%+1rem)]"
         )}
       >
@@ -83,6 +90,7 @@ export function ProjectSidebar({
                       <ProjectItem
                         project={project}
                         active={project.id === activeProjectId}
+                        onNavigate={closeOnMobile}
                         onRename={onRename}
                         onDelete={onDelete}
                       />
@@ -104,6 +112,7 @@ export function ProjectSidebar({
                       <ProjectItem
                         project={project}
                         active={project.id === activeProjectId}
+                        onNavigate={closeOnMobile}
                       />
                     </li>
                   ))}
@@ -132,11 +141,12 @@ export function ProjectSidebar({
 interface ProjectItemProps {
   project: ProjectRow
   active?: boolean
+  onNavigate?: () => void
   onRename?: (project: ProjectRow) => void
   onDelete?: (project: ProjectRow) => void
 }
 
-function ProjectItem({ project, active = false, onRename, onDelete }: ProjectItemProps) {
+function ProjectItem({ project, active = false, onNavigate, onRename, onDelete }: ProjectItemProps) {
   return (
     <div
       className={cn(
@@ -155,15 +165,17 @@ function ProjectItem({ project, active = false, onRename, onDelete }: ProjectIte
       <Link
         href={`/editor/${project.id}`}
         aria-current={active ? "page" : undefined}
+        onClick={onNavigate}
         className={cn(
-          "min-w-0 flex-1 truncate text-sm",
+          "min-w-0 flex-1 truncate py-1 text-sm md:py-0",
           active ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
         )}
       >
         {project.name}
       </Link>
       {onRename && onDelete && (
-        <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+        // Hover-reveal only where hover exists; always visible on touch screens.
+        <div className="flex shrink-0 gap-0.5 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
           <Button
             variant="ghost"
             size="icon-sm"

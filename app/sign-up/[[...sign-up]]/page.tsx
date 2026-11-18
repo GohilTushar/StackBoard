@@ -25,7 +25,7 @@ const features = [
 
 export default function SignUpPage() {
   return (
-    <main className="min-h-screen flex">
+    <main className="flex min-h-dvh">
       <div className="hidden lg:flex w-1/2 flex-col bg-bg-surface border-r border-border-default">
         <div className="px-12 pt-10">
           <div className="flex items-center gap-2.5">
@@ -80,7 +80,17 @@ export default function SignUpPage() {
         </div>
       </div>
 
-      <div className="flex flex-1 lg:w-1/2 items-center justify-center p-8 bg-bg-base">
+      <div className="flex flex-1 flex-col items-center justify-center gap-6 bg-bg-base px-4 py-8 sm:p-8 lg:w-1/2">
+        <div className="flex items-center gap-2.5 lg:hidden">
+          <Image
+            src="/brand/stackboard-icon.svg"
+            alt=""
+            width={28}
+            height={28}
+            className="h-7 w-7 shrink-0"
+          />
+          <span className="text-sm font-semibold text-text-primary">Stackboard</span>
+        </div>
         <SignUp />
       </div>
     </main>

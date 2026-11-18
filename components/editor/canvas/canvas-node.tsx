@@ -18,7 +18,7 @@ const MIN_WIDTH = 60
 const MIN_HEIGHT = 40
 
 const HANDLE_CLS =
-  "!h-2.5 !w-2.5 !rounded-full !border-2 !border-bg-base !bg-white opacity-0 transition-opacity group-hover/node:opacity-100"
+  "!h-2.5 !w-2.5 !rounded-full !border-2 !border-bg-base !bg-white opacity-0 transition-opacity group-hover/node:opacity-100 group-data-[selected=true]/node:opacity-100"
 
 const RESIZER_HANDLE_STYLE: React.CSSProperties = {
   width: 8,
@@ -177,6 +177,8 @@ export function CanvasNodeComponent({ id, data, selected }: NodeProps<CanvasNode
   return (
     <div
       style={{ width: "100%", height: "100%" }}
+      // data-selected also reveals handles on touch screens, where there is no hover.
+      data-selected={selected ? "true" : undefined}
       className="group/node relative flex items-center justify-center text-sm font-medium"
       onDoubleClick={startEditing}
     >

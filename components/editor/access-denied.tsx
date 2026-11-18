@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button"
 export function AccessDenied() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-bg-base px-4">
-      <div className="flex w-full max-w-md flex-col items-center rounded-3xl border border-border-subtle bg-bg-surface px-8 py-10 text-center">
+      <div className="flex w-full max-w-md flex-col items-center rounded-3xl border border-border-subtle bg-bg-surface px-6 py-8 text-center sm:px-8 sm:py-10">
         <div className="mb-4 rounded-2xl border border-border-subtle bg-bg-elevated p-4">
           <Lock className="h-8 w-8 text-text-secondary" />
         </div>
